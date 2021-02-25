@@ -6,6 +6,25 @@ $.extend ( ArmRobotRepresentation.prototype, RobotRepresentation.prototype );
 
 ArmRobotRepresentation.prototype.build = function build (l1,l2,l3,l4) {
     
+    this.tasks = [];
+    this.active_task = {'class':'none','value':0}
+    
+    this.wait_tasks = [];
+    this.wait_task = 0;
+
+    this.yaw_state = 0;
+    this.yaw_task = 0;
+    this.yaw_vel = 0.01;
+    this.yaw_tasks = [];
+    this.max_vel_yaw = 1;
+
+
+    this.pitch_state = 0 ;
+    this.pitch_task = 0;
+    this.pitch_vel = 0.01;
+    this.pitch_tasks = [];
+    this.max_vel_pitch = 1;
+
     if ( !this.isBuilt ) {
         console.log( "Building robot: " + this.id );
         this
@@ -23,6 +42,7 @@ ArmRobotRepresentation.prototype.build = function build (l1,l2,l3,l4) {
         console.log( "Already built: " + this.id );
         return false;
     }
+
 }
 
 ArmRobotRepresentation.prototype.addBody = function addBody (l1,l2,l3,l4) {
@@ -50,8 +70,6 @@ ArmRobotRepresentation.prototype.addBody = function addBody (l1,l2,l3,l4) {
 
     this.l1.rotation.set(Math.PI / 2,0,0);
 
-    console.log(this.l1);
-
     //var material = new THREE.MeshBasicMaterial({color:'red'});
 
     //this.l2 = new THREE.Mesh( new THREE.BoxGeometry(10, 20, 10), material );
@@ -62,8 +80,6 @@ ArmRobotRepresentation.prototype.addBody = function addBody (l1,l2,l3,l4) {
     //this.l2.scale.set(0.1,0.1,0.1);
     this.l2.name = 'l2';
     this.l2.rotation.set(Math.PI,0,0);
-
-    console.log(this.l2);
 
     this.j1 = new THREE.Object3D();
     this.j1.translateZ(-10);
@@ -90,19 +106,31 @@ ArmRobotRepresentation.prototype.addBody = function addBody (l1,l2,l3,l4) {
     this.l4.receiveShadow = true;
     this.l4.name = 'l4'
 
-    this.spotLight = new THREE.SpotLight( 0xffffff,5 );
-    this.spotLight.position.set( 0, 0, 150 );
+    this.spotLight = new THREE.SpotLight( 'blue',2 );
+    this.spotLight.position.set( 0, 0, 300 );
     
-    //this.spotLight.castShadow = true;
+    this.spotLight.castShadow = true;
+    this.spotLight.shadowCameraNear = 11;
+    this.spotLight.shadowCameraFar = 600;
     
 
     //this.spotLight.castShadow = false;
     this.spotLight.angle = 0.3;
     this.spotLight.penumbra = 0.2;
-    //this.spotLight.decay = 2;
+    this.spotLight.decay = 2;
     this.spotLight.distance = 0;
 
-    this.spotLight.target.position.set(0,0,600);
+    
+    this.spotLight.target.position.set(0,0,301);
+
+    this.lightHelper = new THREE.SpotLightHelper( this.spotLight ,5);
+
+    var geo_cone = new THREE.CylinderGeometry(0.0, 50, 500, 32*2, 20, true);
+    var vol_mat = new THREEx.VolumetricSpotLightMaterial(this.spotLight);
+    var l_mesh = new THREE.Mesh(geo_cone, vol_mat);
+
+    vol_mat.uniforms.lightColor.value.set('blue');
+
 
     this.l1.add(this.j1);
     this.j1.add(this.l2);
@@ -110,7 +138,21 @@ ArmRobotRepresentation.prototype.addBody = function addBody (l1,l2,l3,l4) {
     this.j2.add(this.l3);
     this.l3.add(this.l4);
     this.l4.add(this.spotLight);
+    //his.scene.add(this.spotLight.target)
+
     this.l4.add(this.spotLight.target);
+    //this.scene.add(this.spotLight);
+    //this.scene.add(this.spotLight.target);
+    //this.l4.add(this.lightHelper);
+    //this.l4.add(this.lightHelper);
+    //this.scene.add(this.lightHelper);
+    this.l4.add(l_mesh);
+
+    this.scene.traverse(object => {
+        if(object.type === 'Mesh') object.material.needsUpdate = true;
+    });
+
+
     //this.l1.add(this.l2);
     // this.j1 = new Physijs.BoxMesh(
     //     new THREE.BoxGeometry(0,0,0),
@@ -187,6 +229,52 @@ ArmRobotRepresentation.prototype.updateJointsAngles = function updateJointsAngle
     return this;
 }
 
+ArmRobotRepresentation.prototype.updatePitchAngle = function updatePitchAngle (angle){
+
+    this.j2.rotateOnAxis(new THREE.Vector3(1,0,0),angle);
+    this.pitch_state += angle;
+    return this;
+}
+
+ArmRobotRepresentation.prototype.updateYawAngle = function updateYawAngle (angle){
+
+    this.j1.rotateOnAxis(new THREE.Vector3(0,0,1),angle);
+    this.yaw_state += angle;
+    return this;
+}
+
+ArmRobotRepresentation.prototype._addTask = function _addTask(a,value){
+    var new_task = {'class':a,'value':value};
+    this.tasks.push(new_task);
+    return this;
+}
+ArmRobotRepresentation.prototype.moverYaw = function moverYaw(angulo){
+    var new_task = {'class':'yaw','value':angulo};
+    this.tasks.push(new_task);
+    return this;
+}
+
+ArmRobotRepresentation.prototype.moverPitch = function moverPitch(angulo){
+    var new_task = {'class':'pitch','value':angulo};
+    this.tasks.push(new_task);
+    return this;
+}
+
+ArmRobotRepresentation.prototype.esperar = function esperar(tiempo){
+    var new_task = {'class':'wait', 'value':tiempo};
+    this.tasks.push(new_task);
+    return this;
+}
+
+ArmRobotRepresentation.prototype.cambiarRapidezYaw = function cambiarRapidezYaw(vel){
+    var new_task = {'class':'yaw_vel','value':vel};
+    this.tasks.push(new_task);
+    return this;
+}
+
+ArmRobotRepresentation.prototype.cambiarRapidezPitch = function cambiarRapidezPitch(vel){
+    return this._addTask('pitch_vel',vel);
+}
 /**
  * Updates light intensity
  * @param {float} intensity - intensity of light (0 to 1)
@@ -212,28 +300,104 @@ ArmRobotRepresentation.prototype.process = function process ( ) {
     return this;
 }
 
+ArmRobotRepresentation.prototype.nearZero = function nearZero (num) {
+    return Math.abs(num) < 0.0001;
+}
+
 /**
  * Updates the data to/from the robot's behavior.
  * @override
  * @param {Object} data - The data received/transmitted
  */
 ArmRobotRepresentation.prototype.update = function update ( data ) {
-    
+
+
+
     if ( !this.isBuilt ) {
         return;
     }
-        
-    this.receivedData = data;
-    
-    if ( typeof data !== 'undefined' ) {
-        
-        for ( var i=0; i<this.dataPropertiesIn.length; i++ ) {
-            this.data[this.dataPropertiesIn[i]] = data[this.dataPropertiesIn[i]];
+
+    if (this.active_task.class == 'none' && this.tasks.length > 0){
+        this.active_task = this.tasks.shift();
+        if (this.active_task.class == 'yaw'){
+            this.active_task.value -= this.yaw_state ;
         }
-        
-        this.process( );
+        if (this.active_task.class == 'pitch'){
+            this.active_task.value -= this.pitch_state ;
+        }
+    }
+
+    if (this.active_task.class == 'wait' && this.active_task.value >= 1){
+        this.active_task.value -= 1;
+    }
+
+    if (this.active_task.class == 'wait' && this.nearZero(this.active_task.value)){
+        this.active_task.class = 'none';
     }
     
+    if (this.active_task.class == 'yaw' && !this.nearZero(this.active_task.value)){
+        const sig_yaw = Math.sign(this.active_task.value);
+        this.updateYawAngle(this.yaw_vel*sig_yaw);
+        this.active_task.value -= this.yaw_vel*sig_yaw;
+    }
+    
+    if (this.active_task.class == 'pitch' && !this.nearZero(this.active_task.value)){
+        const sig_pitch = Math.sign(this.active_task.value);
+        this.updatePitchAngle(this.pitch_vel*sig_pitch);
+        this.active_task.value -= this.pitch_vel*sig_pitch;
+    }
+
+    if (this.active_task.class == 'yaw' && this.nearZero(this.active_task.value)){
+        this.active_task.class = 'none';
+    }
+    
+    if (this.active_task.class == 'pitch' && this.nearZero(this.active_task.value)){
+        this.active_task.class = 'none';
+    }
+
+    if (this.active_task.class == 'yaw_vel'){
+        if (this.active_task.value > this.max_vel_yaw){
+            this.yaw_vel = this.max_vel_yaw;
+        }
+        else if (this.active_task.value < 0){
+            this.yaw_vel = 0;
+        }
+        else {
+            this.yaw_vel = this.active_task.value;
+        }
+        this.active_task.class = 'none';
+    }
+
+    if (this.active_task.class == 'pitch_vel'){
+        if (this.active_task.value > this.max_vel_pitch){
+            this.pitch_vel = this.max_vel_pitch;
+        }
+        else if (this.active_task.value < 0){
+            this.pitch_vel = 0;
+        }
+        else {
+            this.pitch_vel = this.active_task.value;
+        }
+        this.active_task.class = 'none';
+    }
+    
+
+
+
+
+
+    
+        
+    //this.receivedData = data;
+    
+    //if ( typeof data !== 'undefined' ) {
+    //    
+    //    for ( var i=0; i<this.dataPropertiesIn.length; i++ ) {
+    //        this.data[this.dataPropertiesIn[i]] = data[this.dataPropertiesIn[i]];
+    //    }
+    //    
+    //    this.process( );
+    //    }
     
     //console.log ( this.data );
     

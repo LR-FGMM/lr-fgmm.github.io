@@ -1,13 +1,13 @@
-//var host = '127.0.0.1:9080';
+var host = '';
 //var host = '192.168.1.12:9080';
-var host = 'silent-robot-304412.rj.r.appspot.com';
+//var host = 'silent-robot-304412.rj.r.appspot.com';
 var simulationDefaults = {
     stats: {
         mode: 0 // 0: fps, 1: ms, 2: mb (see http://github.com/mrdoob/stats.js)
         },
     robotsManagers: {
-        main: {
-            url: "http://" + host + "/update",
+        controlador: {
+            url:"/update",
             failureColor: 0xffaaaa,
             robots: [
                 {
@@ -28,8 +28,7 @@ var simulationDefaults = {
     },
     renderer: {
         antialias: true,
-        backgroundColor: 0xfac94e,
-        shadows: false, 
+        shadows: true, 
     },
     mainCamera: {
         fov: 60,
@@ -41,10 +40,10 @@ var simulationDefaults = {
     },
     light: {
         color: 0xFFFFFF,
-        intensity: 2,
-        position: new THREE.Vector3( 25, 250, 80 ),
+        intensity: 0.5,
+        position: new THREE.Vector3( -28, 281, 218 ),
         near: 11,
-        far: 600
+        far: 700
     },
     axisHelper: {
         visible: true,
@@ -56,74 +55,80 @@ var simulationDefaults = {
         restitution: 0.1,
         pieces: {
             bottom: {
-                sizeX: 256,
+                sizeX: 1024,
                 sizeY: 2,
-                sizeZ: 256,
+                sizeZ: 1024,
                 position: new THREE.Vector3( 0, -1, 0 )
             },
+            /* top: {
+                sizeX: 1024,
+                sizeY: 2,
+                sizeZ: 1024,
+                position: new THREE.Vector3(0,250,0)
+            }, */
             leftBorder: {
                 sizeX: 4,
-                sizeY: 100,
-                sizeZ: 256,
-                position: new THREE.Vector3( -130, 2, 0 ),
+                sizeY: 200,
+                sizeZ: 600,
+                position: new THREE.Vector3( -300, 100, 0 ),
                 color: 0xE8AE8A
             },
             rightBorder: {
                 sizeX: 4,
-                sizeY: 4,
-                sizeZ: 256,
-                position: new THREE.Vector3( 130, 2, 0 ),
+                sizeY: 200,
+                sizeZ: 600,
+                position: new THREE.Vector3( 300, 100, 0 ),
                 color: 0xE8AE8A
             },
             topBorder: {
-                sizeX: 264,
-                sizeY: 4,
+                sizeX: 600,
+                sizeY: 200,
                 sizeZ: 4,
-                position: new THREE.Vector3( 0, 2, -130 ),
+                position: new THREE.Vector3( 0, 100, -300 ),
                 color: 0xE8AE8A
             },
-            bottomBorder: {
-                sizeX: 264,
-                sizeY: 4,
+            /*bottomBorder: {
+                sizeX: 600,
+                sizeY: 200,
                 sizeZ: 4,
-                position: new THREE.Vector3( 0, 2, 130 ),
+                position: new THREE.Vector3( 0, 100, 300 ),
                 color: 0xE8AE8A
-            },/*
+            },/* 
             wall_1: {  
-                sizeX: 160,
-                sizeY: 16,
+                sizeX: 800,
+                sizeY: 160,
                 sizeZ: 4,
-                position: new THREE.Vector3( 2, 8, -80 ),
+                position: new THREE.Vector3( 2, 8, -800 ),
                 color: 0xADD8E6,
                 // rotation: new THREE.Vector3( 0, Math.PI / 10, 0 )
             },
             wall_2: {
                 sizeX: 4,
-                sizeY: 16,
-                sizeZ: 160,
-                position: new THREE.Vector3( -80, 8, -2 ), 
+                sizeY: 160,
+                sizeZ: 800,
+                position: new THREE.Vector3( -800, 8, -2 ), 
                 color: 0xFCB6FC,
-                opacity: 0.4,
+                opacity: 1,
                 mass: 100
             },
             wall_3: {
                 sizeX: 4,
-                sizeY: 16,
-                sizeZ: 160,
-                position: new THREE.Vector3( 80, 8, 2 ), 
+                sizeY: 160,
+                sizeZ: 800,
+                position: new THREE.Vector3( 800, 8, 2 ), 
                 color: 0xD5FDD5,
-                opacity: 0.4
+                opacity: 1
             },
             wall_4: {
-                sizeX: 160,
-                sizeY: 16,
+                sizeX: 800,
+                sizeY: 160,
                 sizeZ: 4,
-                position: new THREE.Vector3( -2, 8, 80 ), 
+                position: new THREE.Vector3( -2, 8, 800 ), 
                 color: 0xFFD891,
-                opacity: 0.4
-            }*/
-        }
+                opacity: 1
+     } */
     }
+   }
     
 }
 

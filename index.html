@@ -4,11 +4,10 @@
 
 <head>
     <style>
-        body {
-            /* set margin to 0 and overflow to hidden, to go fullscreen */
-            margin: 0;
-            overflow: hidden;
-            background-color: #000000;
+        #left {
+            position:fixed;
+            left: 500px;
+        
         }
         #infobox {
             color: white;
@@ -17,11 +16,17 @@
             position: absolute;
             top: 5px;
             left: 5px;
-            zIndex: 110;
         }
         #infobox a {
             text-decoration: none;
             color: white;
+        }
+
+        #gui-container {
+            position: absolute;
+            top: 5px;
+            left: 350px;
+            z-index: 10;
         }
         
     </style>
@@ -29,28 +34,117 @@
     <title>RoboThree</title>
     <meta charset="utf-8" />
 
+
+    <script type="text/javascript" src="css/dummy.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="css/result-light.css">
+
+    <link rel="stylesheet" type="text/css" href="css/codemirror.css">
+    <link rel="stylesheet" type="text/css" href="css/lint.css">
+    <link rel="stylesheet" href="css/dracula.css">
+
+
+
+
+
+    <script type="text/javascript" src="js/codemirror.js"></script>
+    <script type="text/javascript" src="js/javascript.js"></script>
+    <script type="text/javascript" src="js/css.js"></script>
+    <script type="text/javascript" src="js/htmlmixed.js"></script>
+    <script type="text/javascript" src="js/xml.js"></script>
+    <script type="text/javascript" src="js/lint.js"></script>
+    <script type="text/javascript" src="js/javascript-lint.js"></script>
+    <script type="text/javascript" src="js/json-lint.js"></script>
+    <script type="text/javascript" src="js/css-lint.js"></script>
+    <script type="text/javascript" src="js/html-lint.js"></script>
+    <script type="text/javascript" src="js/jshint.js"></script>
+    <script type="text/javascript" src="js/jsonlint.js"></script>
+    <script type="text/javascript" src="https://csslint.net/js/csslint.js"></script>
+    <script type="text/javascript" src="js/closetag.js"></script>
+    <script type="text/javascript" src="js/matchbrackets.js"></script>
+    <script type="text/javascript" src="js/active-line.js"></script>
+    <script type="text/javascript" src="js/foldcode.js"></script>
+    <script type="text/javascript" src="js/foldgutter.js"></script>
+    <script type="text/javascript" src="js/brace-fold.js"></script>
+    <script type="text/javascript" src="js/xml-fold.js"></script>
+    <script type="text/javascript" src="js/comment-fold.js"></script>
+    
+
+    <style id="compiled-css" type="text/css"></style>
+
     <link rel="icon" type="image/png" sizes="32x32" href="assets/icons/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="96x96" href="assets/icons/favicon-96x96.png">
     <link rel="icon" type="image/png" sizes="16x16" href="assets/icons/favicon-16x16.png">
-
+    
+    <script src="libs/vendor/jquery-2.1.4.min.js"></script>
+    <!--script defer src="controllers/ArmRobotController.js"></script-->
+    <!--script defer src="virtualizers/ArmRobotVirtualizer.js"></script-->
+    <!--script defer src="dist/msw.js"></script-->
+    <!--script defer src="dist/server.js"></script-->
     <script defer src="libs/vendor/three.min.js"></script>
+    <script src="libs/vendor/threex.volumetricspotlightmaterial.js"></script>
     <script defer src="libs/vendor/stats.min.js"></script>
     <script defer src="libs/vendor/physi.js"></script>
     <script defer src="libs/vendor/dat.gui.js"></script>
     <script defer src="libs/vendor/chroma.js"></script>
-    <script defer src="libs/vendor/jquery-2.1.4.min.js"></script>
+    
     <script defer src="libs/vendor/ThreeBSP.js"></script>
     <script defer src="libs/vendor/STLLoader.js"></script>
     <script defer src="libs/vendor/orbit.js"></script>
     <script defer src="fgmm_config/default.js"></script>
     <script defer src="fgmm_config/gui.js"></script>
     <script defer src="libs/robothree/robothree.js"></script>
+
     <!--<script defer src="robots/ThreeWheelDistanceSensingRobot.js"></script>-->
 
 </head>
 
 <body>
-<div id="viewport"></div>
-</body>
+<!--div id="prueba"></div>
 
+</div-->
+<div id="left">
+    <div id="viewport" style="width: 600px; height: 600px;"></div>
+    <div id="gui-container" ></div>    
+</div>
+
+<!--textarea id="w3review" name="w3review" rows="90" cols="50">
+    At w3schools.com you will learn how to make a website. They offer free tutorials in all web development technologies.
+</textarea-->
+<textarea class="input-group-addon" id="code-js" name="code-js" >
+var dmx = window.simulator.getRobotById("arm");
+dmx.moverPitch(0);
+</textarea>
+
+<div id="button-container">
+    <!--<button onclick id="generator" style="display:;">XML</button>-->
+    <button onclick id="run-code"> Run Code </button>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(()=>{
+      
+        $('#run-code').click(()=>{
+            console.log("me tocaron");
+            var text2 = editor.getValue();
+            eval(text2);
+            console.log(text2);   
+
+        });
+      
+    });
+    var editor = CodeMirror.fromTextArea(document.getElementById("code-js"), {
+      lineNumbers: true,
+      mode: "javascript",
+      theme:"dracula",
+      gutters: ["CodeMirror-lint-markers"],
+      lint: true
+    });
+  
+    editor.setSize(450, 500);
+</script>
+    
+
+
+</body>
 </html>

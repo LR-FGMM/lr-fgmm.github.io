@@ -384,27 +384,32 @@ RobotsManager.prototype.addRobots = function () {
 RobotsManager.prototype.update = function () {
     var robots = this.robots; // a reference
     var rm = this; // a reference
-    
-    var posting = $.post( this.url, JSON.stringify( this.data ), function() {
-        // the connection started, we don't need to do anything...
-        //console.log("contacting url " + this.url);
-        })
-    .done(function(data) {
-        // the connection is done;
-        //console.log (data);
-        $.each( robots, function ( index, robot ) {
-            rm.data[robot.id] = robot.update( data[robot.id] );
-        });
-    })
-    .fail(function() {
-        //console.log(robots);
-        $.each( robots, function ( index, robot ) {
-            rm.data[robot.id] = robot.manageCommunicationFailure();
-        });
-    })
-    .always(function() {
-       //alert( "finished" );
+    $.each( robots, function ( index, robot ) {
+        robot.update(1);
     });
+    
+    
+    //var posting = $.post( this.url, JSON.stringify( this.data ), function() {
+    //    // the connection started, we don't need to do anything...
+    //    //console.log("contacting url " + this.url);
+    //    })
+    //.done(function(data) {
+    //    // the connection is done;
+    //    //console.log (data);
+    //    $.each( robots, function ( index, robot ) {
+    //        rm.data[robot.id] = robot.update( data[robot.id] );
+    //    });
+    //})
+    //.fail(function() {
+    //    //console.log(robots);
+    //    $.each( robots, function ( index, robot ) {
+    //        rm.data[robot.id] = robot.manageCommunicationFailure();
+    //    });
+    //})
+    //.always(function() {
+    //   //alert( "finished" );
+    //});
+
     return this;
 }
 
@@ -434,8 +439,10 @@ var Simulator = function ( defaults ) {
     this.initRenderer = function initRenderer ( options ) {
         var values = $.extend ( {}, this.defaults.renderer, options );
         this.renderer = new THREE.WebGLRenderer( {antialias: values.antialias, preserveDrawingBuffer: true, alpha: true } );
-        this.renderer.setSize(window.innerWidth, window.innerHeight);
-        this.renderer.setClearColor( values.backgroundColor, 1 );
+        //this.renderer.setSize(window.innerWidth, window.innerHeight);
+        var container = document.getElementById('viewport');
+        this.renderer.setSize($(container).width(), $(container).height());
+        //this.renderer.setClearColor( values.backgroundColor, 1 );
         this.renderer.shadowMap.enabled = values.shadows;
         $('#viewport').append(this.renderer.domElement);
         return this;
@@ -472,6 +479,7 @@ var Simulator = function ( defaults ) {
         this.renderStats.domElement.style.top = '1px';
         this.renderStats.domElement.style.left = '1px';
         this.renderStats.domElement.style.zIndex = 100;
+
         $('#viewport').append(this.renderStats.domElement);
         return this;
     };
@@ -514,6 +522,8 @@ var Simulator = function ( defaults ) {
      * Loops on the robots' managers, calling the update() method for each of them.
      */
     this.onUpdate = function onUpdate() {
+
+
         $.each ( this.robotsManagers, function ( id, robotManager ) {
             robotManager.update();
         });
@@ -589,13 +599,17 @@ var Simulator = function ( defaults ) {
         
         var values = $.extend ( {}, this.defaults.light, options );
         
-        this.light = new THREE.SpotLight( values.color, values.intensity );
+        //this.light = new THREE.SpotLight( values.color, values.intensity );
+        this.light = new THREE.PointLight(values.color, values.intensity);
         this.light.position.copy( values.position );
         this.light.castShadow = true;
         //this.light.shadowMapDebug = true;
-        this.light.shadowCameraNear = values.near;
-        this.light.shadowCameraFar = values.far;
+        //this.light.shadowCameraNear = values.near;
+        //this.light.shadowCameraFar = values.far;
         this.scene.add( this.light );
+        //this.helper = new THREE.SpotLightHelper( this.light);
+        //this.scene.add(this.helper);
+
         return this;
     };
 
@@ -620,6 +634,9 @@ var Simulator = function ( defaults ) {
      */
     this.addGUI = function addGUI () {
         this.gui = guiFactory ( this );
+        //this.gui.domElement.style.zIndex = 200;
+        var customContainer = document.getElementById('gui-container');
+        customContainer.appendChild(this.gui.domElement);
         return this;
     };
     
@@ -651,41 +668,42 @@ var Simulator = function ( defaults ) {
             // Function called when the resource is loaded
             function ( texture ) {
 
-                simulator.bottom.canvasElement = $('<canvas />');
-                simulator.bottom.canvasElement.attr('id', 'mycanvas');
-                simulator.bottom.canvas = simulator.bottom.canvasElement[0];
-                simulator.bottom.canvas.width = texture.image.width;
-                simulator.bottom.canvas.height = texture.image.height;
-                simulator.bottom.canvas.getContext( '2d' ).drawImage( texture.image, 0, 0, texture.image.width, texture.image.height );
+                //simulator.bottom.canvasElement = $('<canvas />');
+                //simulator.bottom.canvasElement.attr('id', 'mycanvas');
+                //simulator.bottom.canvas = simulator.bottom.canvasElement[0];
+                //simulator.bottom.canvas.width = texture.image.width;
+                //simulator.bottom.canvas.height = texture.image.height;
+                //simulator.bottom.canvas.getContext( '2d' ).drawImage( texture.image, 0, 0, texture.image.width, texture.image.height );
     
                 var mesh, geometry;
                 
-                simulator.bottom.canvasMap = new THREE.Texture( simulator.bottom.canvas );
-                simulator.bottom.canvasMap.needsUpdate = true;
+                //simulator.bottom.canvasMap = new THREE.Texture( simulator.bottom.canvas );
+                //simulator.bottom.canvasMap.needsUpdate = true;
                 
-                var texturedMaterial = new THREE.MeshBasicMaterial( { map: simulator.bottom.canvasMap, overdraw: 0.5 } );
+                //var texturedMaterial = new THREE.MeshBasicMaterial( { map: simulator.bottom.canvasMap, overdraw: 0.5 } );
 
-                var texturedPjsMaterial = createPhysijsMaterial( texturedMaterial );
+                //var texturedPjsMaterial = createPhysijsMaterial( texturedMaterial );
                 
-                var coloredMaterial = new THREE.MeshLambertMaterial ( {
+                var coloredMaterial = new THREE.MeshPhongMaterial ( {
                     color: 0xffffff,
-                    opacity: 1,
-                    transparent: false,
+                    specular: 0x111111, 
+                    shininess: 200,
                 });
-                var coloredPjsMaterial = createPhysijsMaterial( coloredMaterial );
+                //var coloredPjsMaterial = createPhysijsMaterial( coloredMaterial );
                 
                 $.each( values.pieces, function ( name, piece ) {
                     geometry = new THREE.BoxGeometry( piece.sizeX, piece.sizeY, piece.sizeZ );
                     if ( typeof piece.color === 'undefined' ) {
-                        mesh = new Physijs.BoxMesh( geometry, texturedPjsMaterial, 0 );
+                        var material = new THREE.MeshPhongMaterial( { color: 0x808080, dithering: true } );
+                        mesh = new THREE.Mesh( geometry, material);
                     }
                     else {
-                        mesh = new Physijs.BoxMesh( geometry, coloredPjsMaterial, 0 );
+                        mesh = new THREE.Mesh( geometry, coloredMaterial);
                         mesh.material = mesh.material.clone();
                         mesh.material.color.setHex( piece.color );
-                        if ( typeof piece.opacity !== 'undefined' ) {
-                            mesh.material.opacity = piece.opacity;
-                        }
+                        //if ( typeof piece.opacity !== 'undefined' ) {
+                        //    mesh.material.opacity = piece.opacity;
+                        //}
                     };
                     if ( name == 'bottom' ) {
                         simulator.bottom.width = piece.sizeX;
@@ -789,13 +807,15 @@ $(function () {
         }
         simulator.axisHelper.visible = simulator.gui.userData.controls.showAxis;
         simulator.renderStats.update();
-        simulator.renderDebugText();        
+        simulator.renderDebugText();     
+     
     };
 
     //Physijs.scripts.worker = 'libs/vendor/physijs_worker.js';
     //Physijs.scripts.ammo = 'ammo.js';
 
-    var simulator = new Simulator( simulationDefaults );
+    window.simulator = new Simulator( simulationDefaults );
+    var simulator = window.simulator;
     simulator.initSimulation();
     
     render();
