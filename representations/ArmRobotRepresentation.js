@@ -11,14 +11,17 @@ ArmRobotRepresentation.prototype.build = function build (l1,l2,l3,l4) {
     
     this.wait_tasks = [];
     this.wait_task = 0;
-
+    
+    this.yaw_max = 3;
+    this.yaw_min = -3;
     this.yaw_state = 0;
     this.yaw_task = 0;
     this.yaw_vel = 0.01;
     this.yaw_tasks = [];
     this.max_vel_yaw = 1;
 
-
+    this.pitch_max = 2;
+    this.pitch_min = -2;
     this.pitch_state = 0 ;
     this.pitch_task = 0;
     this.pitch_vel = 0.01;
@@ -33,11 +36,7 @@ ArmRobotRepresentation.prototype.build = function build (l1,l2,l3,l4) {
         console.log( "Building robot: " + this.id );
         this
             .addBody(l1,l2,l3,l4)
-            //.addLight()
-            //.addMotor()
-            //.addVirtualCamera()
             .finalizeBody()
-            .addArm()
             ;
         this.isBuilt = true;
         return true;
@@ -65,23 +64,24 @@ ArmRobotRepresentation.prototype.addBody = function addBody (l1,l2,l3,l4) {
         }
     }, this.initialValues);
 
+    this.model_scale = 2;
     this.l1 = l1;
     this.l1.castShadow = true;
     this.l1.receiveShadow = true;
-    this.l1.position.set(0, 10, 0);
-    this.l1.scale.set(0.1,0.1,0.1);
+    this.l1.position.set(0, this.model_scale*10, 0);
+
+    this.dmx_scale = this.model_scale * 0.1;
+    this.l1.scale.set(this.dmx_scale,this.dmx_scale,this.dmx_scale);
     this.l1.name = 'l1';
 
     this.l1.rotation.set(Math.PI / 2,0,0);
 
-    //var material = new THREE.MeshBasicMaterial({color:'red'});
 
-    //this.l2 = new THREE.Mesh( new THREE.BoxGeometry(10, 20, 10), material );
     this.l2 = l2;
     this.l2.castShadow = true;
     this.l2.receiveShadow = true;
     this.l2.position.set(0, 0,100);
-    //this.l2.scale.set(0.1,0.1,0.1);
+
     this.l2.name = 'l2';
     this.l2.rotation.set(Math.PI,0,0);
 
@@ -93,16 +93,13 @@ ArmRobotRepresentation.prototype.addBody = function addBody (l1,l2,l3,l4) {
 
     this.j2 = new THREE.Object3D();
     this.j2.translateZ(l3_offset);
-    //this.j2Axis = new THREE.Vector3(1,0,0);
-    //this.j2.add(this.j2Axis);
+
 
     this.l3 = l3;
     this.l3.castShadow = true;
     this.l3.receiveShadow = true;
     this.l3.translateZ(-l3_offset);
-    //this.l3.translateZ(-20);
-    //this.l3.position.set(0, 0, 0);
-    //this.l3.scale.set(0.1,0.1,0.1);
+
     this.l3.name = 'l3';
 
     this.l4 = l4;
@@ -118,7 +115,6 @@ ArmRobotRepresentation.prototype.addBody = function addBody (l1,l2,l3,l4) {
     this.spotLight.shadowCameraFar = 600;
     
 
-    //this.spotLight.castShadow = false;
     this.spotLight.angle = 0.3;
     this.spotLight.penumbra = 0.2;
     this.spotLight.decay = 2;
@@ -142,73 +138,14 @@ ArmRobotRepresentation.prototype.addBody = function addBody (l1,l2,l3,l4) {
     this.j2.add(this.l3);
     this.l3.add(this.l4);
     this.l4.add(this.spotLight);
-    //his.scene.add(this.spotLight.target)
 
     this.l4.add(this.spotLight.target);
-    //this.scene.add(this.spotLight);
-    //this.scene.add(this.spotLight.target);
-    //this.l4.add(this.lightHelper);
-    //this.l4.add(this.lightHelper);
-    //this.scene.add(this.lightHelper);
+
     this.l4.add(l_mesh);
 
     this.scene.traverse(object => {
         if(object.type === 'Mesh') object.material.needsUpdate = true;
     });
-
-
-    //this.l1.add(this.l2);
-    // this.j1 = new Physijs.BoxMesh(
-    //     new THREE.BoxGeometry(0,0,0),
-    //     this.getLambertPjsMaterial({color:0xD9D900, opacity:1}),
-    //     0
-    // );
-    //this.j1.translateY(20);
-    //this.j1Axis = new THREE.Vector3(0, 0, 1);
-
-    return this
-}
-
-ArmRobotRepresentation.prototype.addArm = function addArm (){
-    // this.l2 = new Physijs.BoxMesh(
-    //     new THREE.BoxGeometry(10, 20, 10),
-    //     this.getLambertPjsMaterial( { color: 0xD9D900, opacity: 1} ),
-    //     0
-    // );
-    // this.l2.position.set(0, 22, 0);
-    // this.l2.name = 'l2';
-    // this.l2.castShadow = true;
-    // this.l2.receiveShadow = true;
-
-
-    // //this.l1.add(this.l2)
-    // //this.j1.add(this.l2);
-    // this.scene.add(this.l2)
-    // this.scene.add(this.j1)
-
-    // this.jointConstraint = this.createDOFConstraint( this.l1, this.j1, new THREE.Vector3(0,22,0), new THREE.Vector3(0,0,1));
-    // this.scene.addConstraint(this.jointConstraint);
-    // this.jointConstraint.setLinearLowerLimit( new THREE.Vector3( 0, 0, 0 ) ); // sets the lower end of the linear movement along the x, y, and z axes.
-    // this.jointConstraint.setLinearUpperLimit( new THREE.Vector3( 0, 0, 0 ) ); // sets the upper end of the linear movement along the x, y, and z axes.
-    // this.jointConstraint.setAngularLowerLimit( new THREE.Vector3( 0, -0, 0 ) ); // sets the lower end of the angular movement, in radians, along the x, y, and z axes.
-    // this.jointConstraint.setAngularUpperLimit( new THREE.Vector3( 0, 0, 0 ) ); // sets the upper end of the angular movement, in radians, along the x, y, and z axes.
-    // this.jointConstraint.configureAngularMotor(2, 0.1, 0.2, 0, 1500);
-    // this.jointConstraint.enableAngularMotor(2);
-    // this.jointConstraint.disableAngularMotor(2);
-
-    // var constraintPosition = this.l2.position.clone().add( new THREE.Vector3 ( 0, 10, 0 ) );
-    
-    // this.armConstraint = this.createDOFConstraint( this.j1, this.l2, constraintPosition, new THREE.Vector3 ( 0, 0, 1 ));
-    
-    // this.scene.addConstraint( this.armConstraint, true );
-    
-    // this.armConstraint.setLinearLowerLimit( new THREE.Vector3( 0, 0, 0 ) ); // sets the lower end of the linear movement along the x, y, and z axes.
-    // this.armConstraint.setLinearUpperLimit( new THREE.Vector3( 0, 0, 0 ) ); // sets the upper end of the linear movement along the x, y, and z axes.
-    // this.armConstraint.setAngularLowerLimit( new THREE.Vector3( 0, -0, 0 ) ); // sets the lower end of the angular movement, in radians, along the x, y, and z axes.
-    // this.armConstraint.setAngularUpperLimit( new THREE.Vector3( 0, Math.PI, 0 ) ); // sets the upper end of the angular movement, in radians, along the x, y, and z axes.
-    // this.armConstraint.configureAngularMotor(2, 0.1, 0.2, 0, 1500);
-    // this.armConstraint.enableAngularMotor(2);
-    // this.armConstraint.disableAngularMotor(2);
     return this
 }
 
@@ -233,47 +170,77 @@ ArmRobotRepresentation.prototype.updateJointsAngles = function updateJointsAngle
     return this;
 }
 
-ArmRobotRepresentation.prototype.updatePitchAngle = function updatePitchAngle (angle){
-
-    this.j2.rotateOnAxis(new THREE.Vector3(1,0,0),angle);
-    this.pitch_state += angle;
+ArmRobotRepresentation.prototype.setYawAngle = function setYawAngle (angle){
+    this.j1.rotateOnAxis(new THREE.Vector3(0,0,1),angle-this.yaw_state);
+    this.yaw_state = angle;
     return this;
+}
+
+ArmRobotRepresentation.prototype.setPitchAngle = function setPitchAngle (angle){
+    this.j2.rotateOnAxis(new THREE.Vector3(1,0,0),angle-this.pitch_state);
+    this.pitch_state = angle;
+    return this;
+}
+
+ArmRobotRepresentation.prototype.updatePitchAngle = function updatePitchAngle (angle){
+    if (this.pitch_state + angle > this.pitch_max){
+        this.j2.rotateOnAxis(new THREE.Vector3(1,0,0),this.pitch_max-this.pitch_state);
+        this.pitch_state = this.pitch_max;
+        return this;
+    }
+    else if (this.pitch_state + angle < this.pitch_min){
+        this.j2.rotateOnAxis(new THREE.Vector3(1,0,0),this.pitch_min-this.pitch_state);
+        this.pitch_state = this.pitch_min;
+        return this;
+    }
+    else{
+        this.j2.rotateOnAxis(new THREE.Vector3(1,0,0),angle);
+        this.pitch_state += angle;
+        return this;
+    }
 }
 
 ArmRobotRepresentation.prototype.updateYawAngle = function updateYawAngle (angle){
-
-    this.j1.rotateOnAxis(new THREE.Vector3(0,0,1),angle);
-    this.yaw_state += angle;
-    return this;
+    if (this.yaw_state + angle > this.yaw_max){
+        this.j1.rotateOnAxis(new THREE.Vector3(0,0,1),this.yaw_max-this.yaw_state);
+        this.yaw_state = this.yaw_max;
+        return this;
+    }
+    else if (this.yaw_state + angle < this.yaw_min){
+        this.j1.rotateOnAxis(new THREE.Vector3(0,0,1),this.yaw_min-this.yaw_state);
+        this.yaw_state = this.yaw_min;
+        return this;
+    }
+    else{
+        this.j1.rotateOnAxis(new THREE.Vector3(0,0,1),angle);
+        this.yaw_state += angle;
+        return this;
+    }
 }
 
 ArmRobotRepresentation.prototype._addTask = function _addTask(a,value){
+    console.log(typeof(value));
+    if(value == null){
+        return this;
+    }
     var new_task = {'class':a,'value':value};
     this.tasks.push(new_task);
     return this;
 }
 ArmRobotRepresentation.prototype.moverYaw = function moverYaw(angulo){
-    var new_task = {'class':'yaw','value':angulo};
-    this.tasks.push(new_task);
-    return this;
+    return this._addTask('yaw',angulo);
 }
 
 ArmRobotRepresentation.prototype.moverPitch = function moverPitch(angulo){
-    var new_task = {'class':'pitch','value':angulo};
-    this.tasks.push(new_task);
-    return this;
+    return this._addTask('pitch',angulo);
 }
 
 ArmRobotRepresentation.prototype.esperar = function esperar(tiempo){
-    var new_task = {'class':'wait', 'value':tiempo};
-    this.tasks.push(new_task);
-    return this;
+    return this._addTask('wait',tiempo);
 }
 
 ArmRobotRepresentation.prototype.cambiarRapidezYaw = function cambiarRapidezYaw(vel){
-    var new_task = {'class':'yaw_vel','value':vel};
-    this.tasks.push(new_task);
-    return this;
+    return this._addTask('yaw_vel',vel);
 }
 
 ArmRobotRepresentation.prototype.cambiarRapidezPitch = function cambiarRapidezPitch(vel){
@@ -300,8 +267,6 @@ ArmRobotRepresentation.prototype.cambiarColorLuz = function cambiarIntensidadLuz
     this.tasks.push(new_task);
     return this;
 }
-
-
 
 /**
  * Processes incoming data and prepares outgoing data.
@@ -420,25 +385,6 @@ ArmRobotRepresentation.prototype.update = function update ( data ) {
         this.active_task.class = 'none';
     }
     
-
-
-
-
-
-    
-        
-    //this.receivedData = data;
-    
-    //if ( typeof data !== 'undefined' ) {
-    //    
-    //    for ( var i=0; i<this.dataPropertiesIn.length; i++ ) {
-    //        this.data[this.dataPropertiesIn[i]] = data[this.dataPropertiesIn[i]];
-    //    }
-    //    
-    //    this.process( );
-    //    }
-    
-    //console.log ( this.data );
     
     return this.data;
 }

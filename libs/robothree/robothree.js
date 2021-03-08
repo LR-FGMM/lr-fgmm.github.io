@@ -587,6 +587,7 @@ var Simulator = function ( defaults ) {
         this.usedCamera = this.mainCamera; // we keep a reference to the camera that is actually used for each frame
         
         this.orbitControls = new THREE.OrbitControls(this.mainCamera, this.renderer.domElement);
+        this.orbitControls.keyPanSpeed = 0;
         return this;
     };
 
@@ -807,8 +808,14 @@ $(function () {
         }
         simulator.axisHelper.visible = simulator.gui.userData.controls.showAxis;
         simulator.renderStats.update();
-        simulator.renderDebugText();     
-     
+        simulator.renderDebugText();  
+        var dmx = simulator.getRobotById("arm");
+        if ("Movimientos" in simulator.gui.__folders){
+            simulator.gui.__folders["Movimientos"].__controllers[0].setValue(dmx.spotLight.intensity);
+            simulator.gui.__folders["Movimientos"].__controllers[1].setValue("#"+dmx.spotLight.color.getHexString());
+            simulator.gui.__folders["Movimientos"].__controllers[2].setValue(dmx.yaw_state);
+            simulator.gui.__folders["Movimientos"].__controllers[3].setValue(dmx.pitch_state);
+        }
     };
 
     //Physijs.scripts.worker = 'libs/vendor/physijs_worker.js';

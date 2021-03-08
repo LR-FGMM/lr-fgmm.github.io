@@ -178,6 +178,47 @@ var guiFactory = function ( simulator ) {
     //light.add(controls, 'Z', -800, 800).onChange(controls.changeLight);
     //light.add(controls, 'Intensidad', 0, 10).onChange(controls.changeLight);
 
+    function addControls() {
+        var dmx = window.simulator.getRobotById("arm");
+
+        dmx_params = {"intensidad":dmx.spotLight.intensity,"color":"#0000dd","yaw":0,"pitch":0};
+
+
+    var movimientos = gui.addFolder("Movimientos");
+ 
+    var inten_cont = movimientos.add(dmx_params, 'intensidad', 0, 10).name("Intensidad").onChange(
+        function (value){
+            var dmx = window.simulator.getRobotById("arm");
+            dmx_params.intensidad  = dmx.spotLight.intensity;
+            dmx.spotLight.intensity = value;
+        }
+    );
+    //inten_cont.listen();
+
+    movimientos.addColor(dmx_params,'color').name("Color").onChange(
+        function (value){
+             value=value.replace( '#','0x' );
+             dmx.spotLight.color.setHex(value);
+             //console.log(value);
+        }
+    );
+
+    movimientos.add(dmx_params, 'yaw', -3, 3).name("Yaw").onChange(
+        function (value){
+            var dmx = window.simulator.getRobotById("arm");
+            dmx.setYawAngle(value);
+        }
+    );
+
+    movimientos.add(dmx_params, 'pitch', -2, 2).name("Pitch").onChange(
+        function (value){
+            var dmx = window.simulator.getRobotById("arm");
+            dmx.setPitchAngle(value);
+        }
+    );
+
+}
+
     //var meshes = gui.addFolder("Agregar figuras");
     
     //meshes.addColor(controls, 'Color');
@@ -245,10 +286,12 @@ var guiFactory = function ( simulator ) {
         if (l1 && l2 && l3 && l4) {
           console.log('done');
           console.log ( "adding actual robots..." );
-          setTimeout ( addRobotsToGui, 1500, simulator, gui,l1 ,l2,l3,l4);
+          setTimeout ( addRobotsToGui, 1000, simulator, gui,l1 ,l2,l3,l4);
           console.log(gui.userData);
           var dmx = window.simulator.getRobotById("arm");
           dmx.build(l1,l2,l3,l4);
+          addControls();
+          //setTimeout(addControls,1000);
         }
       }
 
