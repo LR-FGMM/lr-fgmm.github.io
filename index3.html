@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+    <style>
+
+        * {
+        box-sizing: border-box;
+        }
+
+        #infobox {
+            color: white;
+            font-family: Arial, sans-serif;
+            font-size: 0.7em;
+        }
+        #infobox a {
+            text-decoration: none;
+            color: white;
+        }
+
+        #gui-container {
+            z-index: 10;
+        }
+        /* Create two equal columns that floats next to each other */
+        .column {
+            flex:50%;
+            height: 100%;
+            
+        }
+
+        .row{
+            display: flex;
+            height: 100%;
+        }
+
+         html, body{
+            height: 100%;
+            width: 100%;
+            overflow: hidden;
+        }
+        #robothree {
+            width: 100%;
+            height: 100%;
+            
+         }
+        
+    </style>
+
+    <title>RoboThree</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+
+
+    <link rel="icon" type="image/png" sizes="32x32" href="assets/icons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="assets/icons/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="assets/icons/favicon-16x16.png">
+    
+    <script src="libs/vendor/jquery-2.1.4.min.js"></script>
+    <!--script defer src="controllers/ArmRobotController.js"></script-->
+    <!--script defer src="virtualizers/ArmRobotVirtualizer.js"></script-->
+    <!--script defer src="dist/msw.js"></script-->
+    <!--script defer src="dist/server.js"></script-->
+    <script defer src="libs/vendor/three.min.js"></script>
+    <script src="libs/vendor/threex.volumetricspotlightmaterial.js"></script>
+    <script defer src="libs/vendor/stats.min.js"></script>
+    <script defer src="libs/vendor/physi.js"></script>
+    <script defer src="libs/vendor/dat.gui.js"></script>
+    <script defer src="libs/vendor/chroma.js"></script>
+    
+    <script defer src="libs/vendor/ThreeBSP.js"></script>
+    <script defer src="libs/vendor/STLLoader.js"></script>
+    <script defer src="libs/vendor/orbit.js"></script>
+    <script defer src="fgmm_config/default.js"></script>
+    <script defer src="fgmm_config/gui.js"></script>
+    <!--script src="representations/ArmRobotRepresentation.js"></script-->
+    <script defer src="libs/robothree/robothree.js"></script>
+
+    <!--<script defer src="robots/ThreeWheelDistanceSensingRobot.js"></script>-->
+
+</head>
+
+<body>
+<!--div id="prueba"></div>
+
+</div-->
+<div class="row">
+    <div class="column">
+        <!--textarea class="input-group-addon" id="code-js" name="code-js" >
+            var dmx = window.simulator.getRobotById("arm");
+            dmx.moverPitch(1.5);
+            dmx.moverYaw(1.5);
+            dmx.cambiarIntensidadLuz(5);
+            dmx.cambiarColorLuz("green");
+            dmx.moverYaw(3);
+            dmx.moverPitch(1.6);
+            dmx.moverPitch(0);
+            dmx.moverYaw(0);
+            dmx.cambiarColorLuz("red");
+            dmx.cambiarIntensidadLuz(1);
+        </textarea-->
+        <p>hola hola</p>    
+        <div id="button-container">
+            <button onclick id="run-code"> Run Code </button>
+        </div>
+        <div id="gui-container" ></div> 
+    </div>
+    <div class="column">
+        <canvas id="robothree"></canvas>
+    </div>
+  </div>
+
+
+<!--textarea id="w3review" name="w3review" rows="90" cols="50">
+    At w3schools.com you will learn how to make a website. They offer free tutorials in all web development technologies.
+</textarea-->
+
+
+<script type="text/javascript">
+    $(document).ready(()=>{
+      
+        $('#run-code').click(()=>{
+            console.log("me tocaron");
+            var text2 = editor.getValue();
+            eval(text2);
+            console.log(text2);   
+
+        });
+      
+    });
+  
+</script>
+    
+
+
+</body>
+</html>
