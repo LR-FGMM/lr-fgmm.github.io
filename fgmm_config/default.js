@@ -5,7 +5,7 @@ var wall_size = 3500;
 var wall_height = 1000;
 var wall_width = 2048;
 var wall_thick = 4;
-var dmx_ring_radius = 300;
+var dmx_ring_radius = 245;
 var simulationDefaults = {
     stats: {
         mode: 0 // 0: fps, 1: ms, 2: mb (see http://github.com/mrdoob/stats.js)
@@ -22,7 +22,9 @@ var simulationDefaults = {
                     class: 'ArmRobotRepresentation',
                     initialValues: {
                         debugging: false,
-                        position: new THREE.Vector3(-dmx_ring_radius/2,0,-dmx_ring_radius)
+                        position: new THREE.Vector3(0,0,dmx_ring_radius),
+                        orientation: 1,
+                        dmx_axis:1
                     }
                 },
                 {
@@ -32,7 +34,9 @@ var simulationDefaults = {
                     class: 'ArmRobotRepresentation',
                     initialValues: {
                         debugging: false,
-                        position: new THREE.Vector3(dmx_ring_radius,0,-dmx_ring_radius/2)
+                        position: new THREE.Vector3(0,0,-dmx_ring_radius),
+                        orientation: -1,
+                        dmx_axis:1
                     }
                 },
                 {
@@ -42,7 +46,9 @@ var simulationDefaults = {
                     class: 'ArmRobotRepresentation',
                     initialValues: {
                         debugging: false,
-                        position: new THREE.Vector3(-dmx_ring_radius,0,dmx_ring_radius/2)
+                        position: new THREE.Vector3(dmx_ring_radius,0,0),
+                        orientation: -1,
+                        dmx_axis:0
                     }
                 },
                 {
@@ -52,7 +58,57 @@ var simulationDefaults = {
                     class: 'ArmRobotRepresentation',
                     initialValues: {
                         debugging: false,
-                        position: new THREE.Vector3(dmx_ring_radius/2,0,dmx_ring_radius)
+                        position: new THREE.Vector3(-dmx_ring_radius,0,0),
+                        orientation: 1,
+                        dmx_axis:0
+                    }
+                },
+                {
+                    id: 'dmx5',
+                    name: "Arm2",
+                    owner: 'Player One',
+                    class: 'ArmRobotRepresentation',
+                    initialValues: {
+                        debugging: false,
+                        position: new THREE.Vector3(Math.cos(Math.PI/4.)*dmx_ring_radius,0,Math.cos(Math.PI/4.)*dmx_ring_radius),
+                        orientation: 1,
+                        dmx_axis:2
+                    }
+                },
+                {
+                    id: 'dmx6',
+                    name: "Arm2",
+                    owner: 'Player One',
+                    class: 'ArmRobotRepresentation',
+                    initialValues: {
+                        debugging: false,
+                        position: new THREE.Vector3(-Math.cos(Math.PI/4.)*dmx_ring_radius,0,-Math.cos(Math.PI/4.)*dmx_ring_radius),
+                        orientation: -1,
+                        dmx_axis:2
+                    }
+                },
+                {
+                    id: 'dmx7',
+                    name: "Arm2",
+                    owner: 'Player One',
+                    class: 'ArmRobotRepresentation',
+                    initialValues: {
+                        debugging: false,
+                        position: new THREE.Vector3(Math.cos(Math.PI/4.)*dmx_ring_radius,0,-Math.cos(Math.PI/4.)*dmx_ring_radius),
+                        orientation: -1,
+                        dmx_axis:3
+                    }
+                },
+                {
+                    id: 'dmx8',
+                    name: "Arm2",
+                    owner: 'Player One',
+                    class: 'ArmRobotRepresentation',
+                    initialValues: {
+                        debugging: false,
+                        position: new THREE.Vector3(-Math.cos(Math.PI/4.)*dmx_ring_radius,0,Math.cos(Math.PI/4.)*dmx_ring_radius),
+                        orientation: 1,
+                        dmx_axis:3
                     }
                 }
             ]

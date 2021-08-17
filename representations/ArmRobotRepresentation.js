@@ -4,7 +4,7 @@ var ArmRobotRepresentation = function () {
 
 $.extend ( ArmRobotRepresentation.prototype, RobotRepresentation.prototype );
 
-ArmRobotRepresentation.prototype.build = function build (l1,l2,l3,l4) {
+ArmRobotRepresentation.prototype.build = function build (l1,l2,l3,l4,l5) {
     
     this.tasks = [];
     this.active_task = {'class':'none','value':0}
@@ -35,7 +35,7 @@ ArmRobotRepresentation.prototype.build = function build (l1,l2,l3,l4) {
     if ( !this.isBuilt ) {
         console.log( "Building robot: " + this.id );
         this
-            .addBody(l1,l2,l3,l4)
+            .addBody(l1,l2,l3,l4,l5)
             .finalizeBody()
             ;
         this.isBuilt = true;
@@ -48,7 +48,7 @@ ArmRobotRepresentation.prototype.build = function build (l1,l2,l3,l4) {
 
 }
 
-ArmRobotRepresentation.prototype.addBody = function addBody (l1,l2,l3,l4) {
+ArmRobotRepresentation.prototype.addBody = function addBody (l1,l2,l3,l4,l5) {
     
     var values = $.extend ( {
         l1: {
@@ -67,6 +67,9 @@ ArmRobotRepresentation.prototype.addBody = function addBody (l1,l2,l3,l4) {
     this.initial_x = this.initialValues.position.x;
     this.initial_z = this.initialValues.position.z;
 
+    this.dmx_orientation = this.initialValues.orientation;
+    this.dmx_axis = this.initialValues.dmx_axis;
+
     this.model_scale = 3;
     this.l1 = l1;
     this.l1.castShadow = true;
@@ -77,8 +80,22 @@ ArmRobotRepresentation.prototype.addBody = function addBody (l1,l2,l3,l4) {
     this.l1.scale.set(this.dmx_scale,this.dmx_scale,this.dmx_scale);
     this.l1.name = 'l1';
 
-    this.l1.rotation.set((3/2)*Math.PI ,0,0);
-
+    //this.l1.rotation.set((3/2)*Math.PI - Math.PI/6.,0,0);
+    this.a_deg = Math.min(1,Math.abs(this.initial_z))*this.dmx_orientation*- Math.PI/6.;
+    this.b_deg = Math.min(1,Math.abs(this.initial_z))*Math.min(0,this.dmx_orientation)*Math.PI;
+    this.c_deg = Math.PI;
+    if (this.dmx_axis == 0){
+    this.l1.rotation.set(3*Math.PI/2.,-this.dmx_orientation*Math.PI/3.,this.dmx_orientation*Math.PI/2.);
+    }
+    if (this.dmx_axis == 1){
+        this.l1.rotation.set(this.a_deg,this.b_deg,this.c_deg);
+    }
+    if (this.dmx_axis == 2){
+        this.l1.rotation.set(this.a_deg,this.b_deg+Math.PI/4.,this.c_deg+Math.PI/9.);
+    }
+    if (this.dmx_axis == 3){
+        this.l1.rotation.set(this.a_deg,this.b_deg-Math.PI/4.,this.c_deg-Math.PI/9.);
+    }
 
     this.l2 = l2;
     this.l2.castShadow = true;
@@ -108,7 +125,13 @@ ArmRobotRepresentation.prototype.addBody = function addBody (l1,l2,l3,l4) {
     this.l4 = l4;
     this.l4.castShadow = true;
     this.l4.receiveShadow = true;
-    this.l4.name = 'l4'
+    this.l4.name = 'l4';
+
+    this.l5 = l5;
+    this.l5.scale.set(this.dmx_scale,this.dmx_scale,this.dmx_scale);
+    this.l5.rotation.set((3/2)*Math.PI ,0,0);
+    this.l5.name = 'l5';
+    this.l5.position.set(0, this.model_scale*10+800, 0);
 
     this.spotLight = new THREE.SpotLight( 'blue',this.light_intensity);
     this.spotLight.position.set( 0, 0, 300 );
@@ -165,6 +188,7 @@ ArmRobotRepresentation.prototype.addBody = function addBody (l1,l2,l3,l4) {
 
 ArmRobotRepresentation.prototype.finalizeBody = function finalizeBody () {
     this.scene.add ( this.l1 );
+    this.scene.add ( this.l5 );
     //this.scene.add(this.l_mesh)
     return this;
 }
