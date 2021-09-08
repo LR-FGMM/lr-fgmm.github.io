@@ -272,11 +272,17 @@ ArmRobotRepresentation.prototype._addTask = function _addTask(a,value){
     this.tasks.push(new_task);
     return this;
 }
+
+ArmRobotRepresentation.prototype._degToRad = function _degToRad(deg_angle){
+    return Math.PI * (deg_angle/180.0)
+}
 ArmRobotRepresentation.prototype.moverYaw = function moverYaw(angulo){
+    angulo = this._degToRad(angulo);
     return this._addTask('yaw',angulo);
 }
 
 ArmRobotRepresentation.prototype.moverPitch = function moverPitch(angulo){
+    angulo = this._degToRad(angulo);
     return this._addTask('pitch',angulo);
 }
 

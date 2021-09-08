@@ -206,16 +206,18 @@ var guiFactory = function ( simulator ) {
             }
         );
 
-        movimientos.add(dmx_params, 'yaw', -3., 3.,0.1).name("Yaw").onChange(
+        movimientos.add(dmx_params, 'yaw', -180, 180,1).name("Yaw").onChange(
             function (value){
                 var dmx = window.simulator.getRobotById(robot_id);
+                value = dmx._degToRad(value);
                 dmx.setYawAngle(value);
             }
         )
 
-        movimientos.add(dmx_params, 'pitch', -2., 2.,0.1).name("Pitch").onChange(
+        movimientos.add(dmx_params, 'pitch', -120, 120,1).name("Pitch").onChange(
             function (value){
                 var dmx = window.simulator.getRobotById(robot_id);
+                value = dmx._degToRad(value);
                 dmx.setPitchAngle(value);
             }
         )
