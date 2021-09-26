@@ -170,12 +170,12 @@
 for(var i = 1; i < 5; i++){
     var dmx = window.simulator.getRobotById("dmx"+i);
     dmx.esperar(i*100);
-    dmx.moverPitch(1.5);
-    dmx.moverYaw(-3);
+    dmx.moverPitch(90);
+    dmx.moverYaw(-180);
     dmx.cambiarIntensidadLuz(5);
     dmx.cambiarColorLuz("green");
-    dmx.moverYaw(3);
-    dmx.moverPitch(1.6);
+    dmx.moverYaw(180);
+    dmx.moverPitch(100);
     dmx.moverPitch(0);
     dmx.moverYaw(0);
     dmx.cambiarColorLuz("red");
