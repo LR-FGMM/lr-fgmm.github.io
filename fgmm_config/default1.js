@@ -22,8 +22,8 @@ var simulationDefaults = {
                     class: 'ArmRobotRepresentation',
                     initialValues: {
                         debugging: false,
-                        position: new THREE.Vector3(0,0,dmx_ring_radius),
-                        orientation: 1,
+                        position: new THREE.Vector3(0,0,-dmx_ring_radius),
+                        orientation: -1,
                         dmx_axis:1
                     }
                 }
