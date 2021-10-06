@@ -291,10 +291,14 @@ ArmRobotRepresentation.prototype.esperar = function esperar(tiempo){
 }
 
 ArmRobotRepresentation.prototype.cambiarRapidezYaw = function cambiarRapidezYaw(vel){
+    vel = vel.toFixed(2);
+    vel = vel/1000.;
     return this._addTask('yaw_vel',vel.toFixed(2));
 }
 
 ArmRobotRepresentation.prototype.cambiarRapidezPitch = function cambiarRapidezPitch(vel){
+    vel = vel.toFixed(2);
+    vel = vel/1000.;
     return this._addTask('pitch_vel',vel.toFixed(2));
 }
 
@@ -318,12 +322,13 @@ ArmRobotRepresentation.prototype.updateLightIntensity = function updateLightInte
 }
 
 ArmRobotRepresentation.prototype.cambiarIntensidadLuz = function cambiarIntensidadLuz (intensity){
+    intensity = intensity/255.;
     var new_task = {'class':'light_intensity','value':intensity};
     this.tasks.push(new_task);
     return this;
 }
 
-ArmRobotRepresentation.prototype.cambiarColorLuz = function cambiarIntensidadLuz (color){
+ArmRobotRepresentation.prototype.cambiarColorLuz = function cambiarColorLuz (color){
     var new_task = {'class':'light_color','value':color};
     this.tasks.push(new_task);
     return this;
