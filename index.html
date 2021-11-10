@@ -11,7 +11,6 @@
     <title>FGMM-Simulador</title>
     <meta charset="utf-8" />
 
-
     <script type="text/javascript" src="css/dummy.js"></script>
     <!-- css -->
     <link rel="stylesheet" type="text/css" href="css/result-light.css">
@@ -20,10 +19,6 @@
     <link rel="stylesheet" href="css/dracula.css">
     <link rel="stylesheet" href="css/complemento.css">
     <link rel="stylesheet" href="addon/scroll/simplescrollbars.css">
-
-
-
-
 
     <script type="text/javascript" src="js/codemirror.js"></script>
     <script type="text/javascript" src="js/javascript.js"></script>
@@ -84,30 +79,38 @@
 
     <div class="container-fluid d-flex justify-content-start flex-nowrap" style="margin-top:25px; gap:0px; width:100%;">
         <!-- EDITOR DE CODIGO-->
-        <div class="card align-self-stretch w-50"
-            style="background-color:rgb(40,42,54);box-shadow:inset; border-radius:15px; margin-left:0px;">
+        <div class="card align-self-stretch w-50" style="background-color:rgb(40,42,54);box-shadow:inset; border-radius:15px; margin-left:0px;">
+            <div class="card-header">
+                
+                <div class="d-flex justify-content-around">
 
-            <div class="card-header d-flex flex-row-reverse ">
-                <button id="run-code" type="button" class="btn btn-success" style="margin-left:auto;">
-                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px"
-                        fill="#FFFFFF">
-                        <path d="M0 0h24v24H0V0z" fill="none" />
-                        <path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8-8-8z" />
-                    </svg>
-                </button>
-                <button type="button" class="btn btn-success me-auto" id="dwn-btn">
-                    <svg xmlns="http://www.w3.org/2000/svg" enable-background="new 0 0 24 24" height="24px"
-                        viewBox="0 0 24 24" width="24px" fill="#FFFFFF">
-                        <g>
-                            <rect fill="none" height="24" width="24" />
-                        </g>
-                        <g>
-                            <path d="M18,15v3H6v-3H4v3c0,1.1,0.9,2,2,2h12c1.1,0,2-0.9,2-2v-3H18z M17,11l-1.41-1.41L13,12.17V4h-2v8.17L8.41,9.59L7,11l5,5 L17,11z" />
-                        </g>
-                    </svg>
-                </button>
+                    <button type="button" class="btn btn-success " id="dwn-btn p-2 bd-highlight">
+                        <svg xmlns="http://www.w3.org/2000/svg" enable-background="new 0 0 24 24" height="24px"
+                            viewBox="0 0 24 24" width="24px" fill="#FFFFFF">
+                            <g> <rect fill="none" height="24" width="24" /></g>
+                            <g><path d="M18,15v3H6v-3H4v3c0,1.1,0.9,2,2,2h12c1.1,0,2-0.9,2-2v-3H18z M17,11l-1.41-1.41L13,12.17V4h-2v8.17L8.41,9.59L7,11l5,5 L17,11z" /></g>
+                        </svg>
+                    </button>
+    
+                    <a id="boton" type="button" class="btn btn-primary p-2 bd-highlight" href="https://youtu.be/8eEQ_ea6S8c?t=208">
+                        <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="#000000">
+                            <path d="M0 0h24v24H0V0z" fill="none"/>
+                            <path d="M8 16h8v2H8zm0-4h8v2H8zm6-10H6c-1.1 0-2 .9-2 2v16c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm4 18H6V4h7v5h5v11z"/>
+                        </svg>
+                    </a>
+
+                    <button id="run-code" type="button" class="btn btn-success p-2 bd-highlight">
+                        <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px"
+                            fill="#FFFFFF">
+                            <path d="M0 0h24v24H0V0z" fill="none" />
+                            <path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8-8-8z" />
+                        </svg>
+                    </button>
+
+                    
+                </div>
+            
             </div>
-
             <div class="card-body ">
                 <textarea class="input-group overflow-auto" style="margin: auto;" id="code-js"
                     name="code-js">var dmx = window.simulator.getRobotById("dmx1");
@@ -125,12 +128,10 @@ dmx.moverPitch(90);
 
         <script type="text/javascript">
             $(document).ready(() => {
-
                 $('#run-code').click(() => {
                     var text2 = editor.getValue();
                     eval(text2);
                 });
-
             });
 
             var editor = CodeMirror.fromTextArea(document.getElementById("code-js"), {
