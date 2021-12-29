@@ -328,9 +328,11 @@ ArmRobotRepresentation.prototype.cambiarIntensidadLuz = function cambiarIntensid
     return this;
 }
 
-ArmRobotRepresentation.prototype.cambiarColorLuz = function cambiarColorLuz (color){
+ArmRobotRepresentation.prototype.cambiarColorLuz = function cambiarColorLuz (color, intensity){
     var new_task = {'class':'light_color','value':color};
+    var new_task_2 = {'class':'light_intensity','value':intensity};
     this.tasks.push(new_task);
+    this.tasks.push(new_task_2);
     return this;
 }
 

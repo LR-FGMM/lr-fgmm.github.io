@@ -179,6 +179,7 @@ var guiFactory = function ( simulator ) {
     //light.add(controls, 'Intensidad', 0, 10).onChange(controls.changeLight);
 
     function addControls(e) {
+        return
         var dmx = window.simulator.getRobotById(e.detail);
         var robot_id = e.detail;
 
@@ -187,14 +188,14 @@ var guiFactory = function ( simulator ) {
 
         var movimientos = gui.addFolder("Controles "+e.detail);
     
-        var inten_cont = movimientos.add(dmx_params, 'intensidad', 0, 10).name("Intensidad").onChange(
-            function (value){
-                var dmx = window.simulator.getRobotById("arm");
-                dmx_params.intensidad  = dmx.spotLight.intensity;
-                dmx.spotLight.intensity = value;
-                dmx.vol_mat.uniforms['attenuation'].value = 10000**value;
-            }
-        );
+        //var inten_cont = movimientos.add(dmx_params, 'intensidad', 0, 10).name("Intensidad").onChange(
+        //    function (value){
+        //        var dmx = window.simulator.getRobotById("arm");
+        //        dmx_params.intensidad  = dmx.spotLight.intensity;
+        //        dmx.spotLight.intensity = value;
+        //        dmx.vol_mat.uniforms['attenuation'].value = 10000**value;
+        //    }
+        //);
         //inten_cont.listen();
 
         movimientos.addColor(dmx_params,'color').name("Color").onChange(
