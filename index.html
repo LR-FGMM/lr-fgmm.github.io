@@ -123,7 +123,9 @@
             <div class="card-body ">
                 <textarea class="input-group overflow-auto" style="margin: auto;" id="code-js"
                     name="code-js">var portal = new Portal();
-portal.dmxs[0].moverPitch(90);
+portal.moverPitch(90);
+portal.esperar(300);
+portal.moverPitch(0,[0,2,4,6]);
                 </textarea>
             </div>
         </div>
