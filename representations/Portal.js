@@ -10,44 +10,59 @@ Portal.prototype.obtenerDmx = function obtenerDmx(id) {
     return this.dmxs[id];
 }
 
-Portal.prototype.moverPitch = function moverPitch(angle) {
+Portal.prototype.moverPitch = function moverPitch(angle, dmx_control=[0,1,2,3,4,5,6,7]) {
     for (var i = 0; i < this.dmxs.length; i++) {
-        this.dmxs[i].moverPitch(angle);
+        if (dmx_control.includes(i)){
+            this.dmxs[i].moverPitch(angle);
+        }
+        else{
+            continue;
+        }
     }
     return this;
 }
 
-Portal.prototype.moverYaw = function moverYaw(angle) {
+Portal.prototype.moverYaw = function moverYaw(angle, dmx_control=[0,1,2,3,4,5,6,7]) {
     for (var i = 0; i < this.dmxs.length; i++) {
-        this.dmxs[i].moverYaw(angle);
+        if (dmx_control.includes(i)){
+            this.dmxs[i].moverYaw(angle);
+        }
     }
     return this;
 }
 
-Portal.prototype.esperar = function esperar(tiempo){
+Portal.prototype.esperar = function esperar(tiempo, dmx_control=[0,1,2,3,4,5,6,7]){
     for (var i = 0; i < this.dmxs.length; i++) {
-        this.dmxs[i].esperar(tiempo);
+        if (dmx_control.includes(i)){
+            this.dmxs[i].esperar(tiempo);
+        }
     }
     return this;
 }
 
-Portal.prototype.cambiarRapidezYaw = function cambiarRapidezYaw(vel){
+Portal.prototype.cambiarRapidezYaw = function cambiarRapidezYaw(vel, dmx_control=[0,1,2,3,4,5,6,7]){
     for (var i = 0; i < this.dmxs.length; i++) {
-        this.dmxs[i].cambiarRapidezYaw(vel);
+        if (dmx_control.includes(i)){
+            this.dmxs[i].cambiarRapidezYaw(vel);
+        }
     }
     return this;
 }
 
-Portal.prototype.cambiarRapidezPitch = function cambiarRapidezPitch(vel){
+Portal.prototype.cambiarRapidezPitch = function cambiarRapidezPitch(vel, dmx_control=[0,1,2,3,4,5,6,7]){
     for (var i = 0; i < this.dmxs.length; i++) {
-        this.dmxs[i].cambiarRapidezPitch(vel);
+        if (dmx_control.includes(i)){
+            this.dmxs[i].cambiarRapidezPitch(vel);
+        }
     }
     return this;
 }
 
-Portal.prototype.cambiarColorLuz = function cambiarColorLuz(color, intensity){
+Portal.prototype.cambiarColorLuz = function cambiarColorLuz(color, intensity, dmx_control=[0,1,2,3,4,5,6,7]){
     for (var i = 0; i < this.dmxs.length; i++) {
-        this.dmxs[i].cambiarColorLuz(color, intensity);
+        if (dmx_control.includes(i)){
+            this.dmxs[i].cambiarColorLuz(color, intensity);
+        }
     }
     return this;
 }
