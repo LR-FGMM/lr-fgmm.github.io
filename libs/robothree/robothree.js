@@ -450,9 +450,14 @@ RobotsManager.prototype.addRobots = function () {
 RobotsManager.prototype.update = function () {
     var robots = this.robots; // a reference
     var rm = this; // a reference
+    if (robots && robots.length > 0 && robots[0].com_portal){
+        robots[0].com_portal.update(1);
+    }
     $.each( robots, function ( index, robot ) {
+        console.debug('Ciclo de update');
         robot.update(1);
     });
+
     
     
     //var posting = $.post( this.url, JSON.stringify( this.data ), function() {

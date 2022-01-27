@@ -6,7 +6,10 @@ $.extend ( ArmRobotRepresentation.prototype, RobotRepresentation.prototype );
 
 ArmRobotRepresentation.prototype.build = function build (l1,l2,l3,l4,l5) {
     
+    this.com_portal = null;
+
     this.tasks = [];
+    console.debug('Construyendo DMX ....');
     this.active_task = {'class':'none','value':0}
     
     this.wait_tasks = [];
