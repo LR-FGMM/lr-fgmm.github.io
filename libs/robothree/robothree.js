@@ -454,7 +454,7 @@ RobotsManager.prototype.update = function () {
         robots[0].com_portal.update(1);
     }
     $.each( robots, function ( index, robot ) {
-        console.debug('Ciclo de update');
+        //console.debug('Ciclo de update');
         robot.update(1);
     });
 

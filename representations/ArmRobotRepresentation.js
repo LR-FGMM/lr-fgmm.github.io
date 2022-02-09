@@ -366,11 +366,14 @@ ArmRobotRepresentation.prototype.nearZero = function nearZero (num) {
  */
 ArmRobotRepresentation.prototype.update = function update ( data ) {
 
-
+    
 
     if ( !this.isBuilt ) {
         return;
     }
+
+    console.debug("La tarea actual del dmx es "+ this.active_task.class);
+    console.debug("El valor de la tarea actual es " + this.active_task.value);
 
     if (this.active_task.class == 'none' && this.tasks.length > 0){
         this.active_task = this.tasks.shift();

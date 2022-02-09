@@ -96,50 +96,37 @@ Portal.prototype.esperar = function esperar(tiempo, dmx_control=[0,1,2,3,4,5,6,7
 }
 
 Portal.prototype.cambiarRapidezYaw = function cambiarRapidezYaw(vel, dmx_control=[0,1,2,3,4,5,6,7]){
-    vel = vel.toFixed(2);
-    vel = vel/1000.;
-    return this._addTask('yaw_vel',vel.toFixed(2), dmx_control);
+    //vel = vel.toFixed(2);
+    //vel = vel/1000.;
+    return this._addTask('yaw_vel',vel, dmx_control);
 }
 
 Portal.prototype.cambiarRapidezPitch = function cambiarRapidezPitch(vel, dmx_control=[0,1,2,3,4,5,6,7]){
-    vel = vel.toFixed(2);
-    vel = vel/1000.;
-    return this._addTask('pitch_vel',vel.toFixed(2), dmx_control);
+    //vel = vel.toFixed(2);
+    //vel = vel/1000.;
+    return this._addTask('pitch_vel',vel, dmx_control);
 }
 
 Portal.prototype.cambiarColorLuz = function cambiarColorLuz(color, intensity, dmx_control=[0,1,2,3,4,5,6,7]){
-    var new_task = {'class':'light_color','value':color, 'dmxs':dmx_control};
-    var new_task_2 = {'class':'light_intensity','value':intensity, 'dmxs':dmx_control};
+    var new_task = {'class':'light_color_intensity','value':[color,intensity], 'dmxs':dmx_control};
     this.portal_tasks.push(new_task);
-    this.portal_tasks.push(new_task_2);
     return this;
 }
 
 Portal.prototype.moverPitch = function moverPitch(angulo, dmx_control=[0,1,2,3,4,5,6,7]) {
-    angulo = this._degToRad(angulo);
+    //angulo = this._degToRad(angulo);
     return this._addTask('pitch',angulo, dmx_control);
 }
 
 Portal.prototype.moverYaw = function moverYaw(angulo, dmx_control=[0,1,2,3,4,5,6,7]) {
-    angulo = this._degToRad(angulo);
+    //angulo = this._degToRad(angulo);
     return this._addTask('yaw',angulo, dmx_control);
 }
 
 Portal.prototype._degToRad = function _degToRad(deg_angle){
-    return Math.PI * (deg_angle/180.0)
+    return Math.PI * (deg_angle/180.0);
 }
 
-Portal.prototype.cambiarRapidezYaw = function cambiarRapidezYaw(vel, dmx_control=[0,1,2,3,4,5,6,7]){
-    vel = vel.toFixed(2);
-    vel = vel/1000.;
-    return this._addTask('yaw_vel',vel.toFixed(2), dmx_control);
-}
-
-Portal.prototype.cambiarRapidezPitch = function cambiarRapidezPitch(vel, dmx_control=[0,1,2,3,4,5,6,7]){
-    vel = vel.toFixed(2);
-    vel = vel/1000.;
-    return this._addTask('pitch_vel',vel.toFixed(2), dmx_control);
-}
 
 
 Portal.prototype.update = function update (data){
@@ -150,7 +137,7 @@ Portal.prototype.update = function update (data){
     }
 
     if (this.active_task.class == 'waiting_exec'){
-        console.debug('La tarea actual es waiting_exec');
+        console.debug('La tarea actual del portal es waiting_exec');
         let ready = true;
         for (var i = 0; i < this.dmxs.length; i++) {
             console.debug('el dmx ' + i + ' ready is ' + (this.dmxs[i].active_task.class == 'none'));
@@ -172,6 +159,30 @@ Portal.prototype.update = function update (data){
         this.active_task.class = 'waiting_exec';
         console.debug('La tarea actual es pitch');
         return this._moverPitch(this.active_task.value,this.active_task.dmxs);
+    }
+
+    if (this.active_task.class == 'yaw_vel'){
+        this.active_task.class = 'waiting_exec';
+        console.debug('La tarea actual es yaw_vel');
+        return this._cambiarRapidezYaw(this.active_task.value,this.active_task.dmxs);
+    }
+
+    if (this.active_task.class == 'pitch_vel'){
+        this.active_task.class = 'waiting_exec';
+        console.debug('La tarea actual es pitch_vel');
+        return this._cambiarRapidezPitch(this.active_task.value,this.active_task.dmxs);
+    }
+
+    if (this.active_task.class == 'wait'){
+        this.active_task.class = 'waiting_exec';
+        console.debug('La tarea actual es wait');
+        return this._esperar(this.active_task.value,this.active_task.dmxs);
+    }
+
+    if (this.active_task.class == 'light_color_intensity'){
+        this.active_task.class = 'waiting_exec';
+        console.debug('La tarea actual es light_color_intensity');
+        return this._cambiarColorLuz(this.active_task.value[0],this.active_task.value[1],this.active_task.dmxs);
     }
 
 
