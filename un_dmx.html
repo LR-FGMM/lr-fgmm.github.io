@@ -75,7 +75,7 @@
     <script defer src="fgmm_config/gui.js"></script>
     <!--script src="representations/ArmRobotRepresentation.js"></script-->
     <script defer src="libs/robothree/robothree.js"></script>
-
+    <script defer src="representations/Portal.js"></script>
     <!--<script defer src="robots/ThreeWheelDistanceSensingRobot.js"></script>-->
 
 </head>
@@ -120,8 +120,10 @@
             </div>
             <div class="card-body ">
                 <textarea class="input-group overflow-auto" style="margin: auto;" id="code-js"
-                    name="code-js">var dmx = window.simulator.getRobotById("dmx1");
-dmx.moverPitch(90);
+                    name="code-js">var portal = new Portal();
+portal.moverPitch(90);
+portal.esperar(300);
+
                 </textarea>
             </div>
         </div>

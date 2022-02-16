@@ -2,8 +2,10 @@ var Portal = function () {
     this.dmxs = [];
     for (var i = 1; i < 9; ++i){
         var dmx = window.simulator.getRobotById("dmx"+i);
-        dmx.com_portal = this;
-        this.dmxs.push(dmx);
+        if (dmx){
+            dmx.com_portal = this;
+            this.dmxs.push(dmx);
+        }
     }
     this.portal_tasks = [];
     this.active_task = {'class':'none','value':0,'dmxs':[]};
