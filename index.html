@@ -11,6 +11,10 @@
     <title>FGMM-Simulador</title>
     <meta charset="utf-8" />
 
+    <!-- Bootstrap JavaScript and Popper.js -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js"></script>
+
 
     <script type="text/javascript" src="css/dummy.js"></script>
     <!-- css -->
@@ -20,7 +24,7 @@
     <link rel="stylesheet" href="css/dracula.css">
     <link rel="stylesheet" href="css/complemento.css">
     <link rel="stylesheet" href="addon/scroll/simplescrollbars.css">
-
+    <link rel="stylesheet" type="text/css" href="css/prism.css">
 
 
 
@@ -49,7 +53,7 @@
     <!-- js scrollbar-->
     <script type="text/javascript" src="addon/scroll/simplescrollbars.js"></script>
     <script type="text/javascript" src="addon/wrap/hardwrap.js"></script>
-
+    <script type="text/javascript" src="js/prism.js"></script>
     <style id="compiled-css" type="text/css"></style>
 
     <link rel="icon" type="image/png" sizes="32x32" href="assets/icons/favicon-32x32.png">
@@ -86,47 +90,91 @@
     <div class="container-fluid d-flex justify-content-start flex-nowrap" style="margin-top:25px; gap:0px; width:100%;">
         <!-- EDITOR DE CODIGO-->
         <div class="card align-self-stretch w-50"
-            style="background-color:rgb(40,42,54);box-shadow:inset; border-radius:15px; margin-left:0px;">
+            style="background-color:rgb(40,42,54);box-shadow:inset; border-radius:15px; margin-left:0px; width:95vh; height:95vh;">
 
-            <div class="card-header">
-                
-                <div class="d-flex justify-content-around">
-
-                    <button type="button" class="btn btn-success p-2 bd-highlight" id="dwn-btn">
-                        <svg xmlns="http://www.w3.org/2000/svg" enable-background="new 0 0 24 24" height="24px"
-                            viewBox="0 0 24 24" width="24px" fill="#FFFFFF">
-                            <g> <rect fill="none" height="24" width="24" /></g>
-                            <g><path d="M18,15v3H6v-3H4v3c0,1.1,0.9,2,2,2h12c1.1,0,2-0.9,2-2v-3H18z M17,11l-1.41-1.41L13,12.17V4h-2v8.17L8.41,9.59L7,11l5,5 L17,11z" /></g>
-                        </svg>
-                    </button>
-    
-                    <a id="boton" type="button" class="btn btn-primary p-2 bd-highlight" href="https://www.docdroid.net/o4EEEcv/comandos-portal-de-luz-4-pdf" target="_blank">
-                        <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="#000000">
-                            <path d="M0 0h24v24H0V0z" fill="none"/>
-                            <path d="M8 16h8v2H8zm0-4h8v2H8zm6-10H6c-1.1 0-2 .9-2 2v16c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm4 18H6V4h7v5h5v11z"/>
-                        </svg>
-                    </a>
-
-                    <button id="run-code" type="button" class="btn btn-success p-2 bd-highlight">
-                        <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px"
-                            fill="#FFFFFF">
-                            <path d="M0 0h24v24H0V0z" fill="none" />
-                            <path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8-8-8z" />
-                        </svg>
-                    </button>
-
-                    
-                </div>
-            
-            </div>
-
-            <div class="card-body ">
-                <textarea class="input-group overflow-auto" style="margin: auto;" id="code-js"
-                    name="code-js">var portal = new Portal();
+            <ul class="nav nav-tabs">
+                <li class="nav-item">
+                    <button class="nav-link active" id="editor-tab" data-toggle="tab" data-target="#editor"
+                        type="button" role="tab">Editor</button>
+                </li>
+                <li class="nav-item">
+                    <button class="nav-link" id="docs-tab" data-toggle="tab" data-target="#docs" type="button"
+                        role="tab">Documentación</button>
+                </li>
+            </ul>
+            <div class="tab-content" id="myTabContent">
+                <div class="tab-pane fade show active card-body" id="editor" role="tabpanel">
+                    <textarea class="input-group overflow-auto" style="margin: auto;" id="code-js" name="code-js">var portal = new Portal();
 portal.moverPitch(90);
 portal.esperar(300);
 portal.moverPitch(0,[0,2,4,6]);
                 </textarea>
+                    <div class="button-bar-code"
+                        style="display: flex; align-items: center; justify-content: space-between; height:10vh">
+                        <button type="button" class="btn btn-success p-2 bd-highlight" id="dwn-btn">
+                            <svg xmlns="http://www.w3.org/2000/svg" enable-background="new 0 0 24 24" height="4vh"
+                                viewBox="0 0 24 24" width="4vh" fill="#FFFFFF">
+                                <g>
+                                    <rect fill="none" height="4vh" width="4vh" />
+                                </g>
+                                <g>
+                                    <path
+                                        d="M18,15v3H6v-3H4v3c0,1.1,0.9,2,2,2h12c1.1,0,2-0.9,2-2v-3H18z M17,11l-1.41-1.41L13,12.17V4h-2v8.17L8.41,9.59L7,11l5,5 L17,11z" />
+                                </g>
+                            </svg>
+                        </button>
+
+                        <button id="run-code" type="button" class="btn btn-success p-2 bd-highlight">
+                            <svg xmlns="http://www.w3.org/2000/svg" height="4vh" viewBox="0 0 24 24" width="4vh"
+                                fill="#FFFFFF">
+                                <path d="M0 0h24v24H0V0z" fill="none" />
+                                <path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8-8-8z" />
+                            </svg>
+                        </button>
+                        <div id="terminal" class="card align-self-stretch w-40 h-10"
+                            style="background-color: black; color: lime; ;overflow: auto ; width: 70vh; height:8vh; white-space:pre-wrap;">
+                        </div>
+
+                    </div>
+
+                </div>
+                <div class="tab-pane fade card-body overflow-scroll" id="docs" role="tabpanel"
+                    style="background-color: #282a36; color:white; height:85vh;">
+                    <div style="height:100%; overflow:scroll;">
+                        <h2> Portal DMX</h2>
+                        <pre><code class="language-javascript">var portal = new Portal();</code></pre>
+                        <p>Se crea un nuevo objetivo de la clase Portal. El objeto nos permite controlar el portal de
+                            luz.
+                        </p>
+                        <pre><code class="language-javascript">portal.esperar(tiempo);</code></pre>
+                        <p>Permite detener la ejecución del programa por [tiempo] cuadros. La ejecución queda detenida
+                            para todos los DMX.</p>
+                        <pre><code class="language-javascript">portal.cambiarRapidezYaw(vel, dmx_control = [0,1,2,3,4,5,6,7]);</code></pre>
+                        <p>Permite cambiar la rapidez del movimiento Yaw. Recibe un valor entre 0 y 255. Solo ejecuta el
+                            cambio para los DMX especificados en el arreglo dmx_control.
+                        </p>
+                        <pre><code class="language-javascript">portal.cambiarRapidezPitch(vel, dmx_control = [0,1,2,3,4,5,6,7]);</code></pre>
+                        <p>Permite cambiar la rapidez del movimiento Yaw. Recibe un valor entre 0 y 255. Solo ejecuta el
+                            cambio para los DMX especificados en el arreglo dmx_control.
+                        </p>
+                        <pre><code class="language-javascript">portal.cambiarColorLuz(color, intensity, dmx_control = [0,1,2,3,4,5,6,7]);</code></pre>
+                        <p>Permite cambiar el color y la intensidad de la luz de los DMX especificados. El color puede
+                            ser una String en inglés del color (“red”, “blue”, “black”, “purple”, etc.). La intensidad
+                            recibe un valor entre 0 y 255.
+                        </p>
+                        <pre><code class="language-javascript">portal.moverPitch(angulo, dmx_control = [0,1,2,3,4,5,6,7]);</code></pre>
+                        <p>Permite rotar el DMX a lo largo de la orientación Pitch. El ángulo recibe un valor entre -100
+                            grados y +100 grados. Solo ejecuta el cambio para los DMX especificados en el arreglo
+                            dmx_control.
+                        </p>
+                        <pre><code class="language-javascript">portal.moverYaw(angulo, dmx_control = [0,1,2,3,4,5,6,7]);</code></pre>
+                        <p>Permite rotar el DMX a lo largo de la orientación Yaw. El ángulo recibe un valor entre -170
+                            grados y +170 grados. Solo ejecuta el cambio para los DMX especificados en el arreglo
+                            dmx_control.
+                        </p>
+                    </div>
+                </div>
+
             </div>
         </div>
 
@@ -134,7 +182,7 @@ portal.moverPitch(0,[0,2,4,6]);
         <!-- SIMULADOR -->
         <div class="card d-flex p-2 align-self-center w-50" style="border-radius:15px; margin-left:15px; height:95vh;">
             <div hidden id="gui-container" style="z-index: 100; position: absolute;"></div>
-                <canvas id="robothree" style="border-radius:15px; width: 100%; height: 100%; z-index: 1; "></canvas>
+            <canvas id="robothree" style="border-radius:15px; width: 100%; height: 100%; z-index: 1; "></canvas>
         </div>
 
         <script type="text/javascript">
@@ -142,7 +190,13 @@ portal.moverPitch(0,[0,2,4,6]);
 
                 $('#run-code').click(() => {
                     var text2 = editor.getValue();
-                    eval(text2);
+                    try {
+                        eval(text2);
+                    } catch (error) {
+                        appendToTerminal('Error: ' + error.message + '\n');
+                        return;
+                    }
+                    appendToTerminal('Código enviado correctamente \n');
                 });
 
             });
@@ -155,6 +209,10 @@ portal.moverPitch(0,[0,2,4,6]);
                 gutters: ["CodeMirror-lint-markers"],
                 lint: true
             });
+            const savedCode = localStorage.getItem('code');
+            if (savedCode) {
+                editor.setValue(savedCode);
+            }
 
             //descarga del archivo
             function download(filename, text) {
@@ -173,8 +231,14 @@ portal.moverPitch(0,[0,2,4,6]);
 
                 download(filename, text);
             }, false);
+            editor.setSize("100%", "75vh");
             //size window
-            editor.setSize("100%", "600px");
+            function appendToTerminal(message) {
+                var terminal = document.getElementById('terminal');
+                terminal.innerHTML += message + '\n';
+                // Automatically scroll to the end of the terminal output
+                terminal.scrollTop = terminal.scrollHeight;
+            }
 
         </script>
 
