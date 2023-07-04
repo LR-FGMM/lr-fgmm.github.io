@@ -28,7 +28,7 @@ var simulationDefaults = {
                     }
                 },
                 {
-                    id: 'dmx2',
+                    id: 'dmx5',
                     name: "Arm2",
                     owner: 'Player One',
                     class: 'ArmRobotRepresentation',
@@ -40,7 +40,7 @@ var simulationDefaults = {
                     }
                 },
                 {
-                    id: 'dmx3',
+                    id: 'dmx7',
                     name: "Arm2",
                     owner: 'Player One',
                     class: 'ArmRobotRepresentation',
@@ -52,7 +52,7 @@ var simulationDefaults = {
                     }
                 },
                 {
-                    id: 'dmx4',
+                    id: 'dmx3',
                     name: "Arm2",
                     owner: 'Player One',
                     class: 'ArmRobotRepresentation',
@@ -64,7 +64,7 @@ var simulationDefaults = {
                     }
                 },
                 {
-                    id: 'dmx5',
+                    id: 'dmx2',
                     name: "Arm2",
                     owner: 'Player One',
                     class: 'ArmRobotRepresentation',
@@ -88,7 +88,7 @@ var simulationDefaults = {
                     }
                 },
                 {
-                    id: 'dmx7',
+                    id: 'dmx4',
                     name: "Arm2",
                     owner: 'Player One',
                     class: 'ArmRobotRepresentation',
