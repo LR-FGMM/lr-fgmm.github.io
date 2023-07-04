@@ -213,6 +213,10 @@ portal.moverPitch(0,[0,2,4,6]);
             if (savedCode) {
                 editor.setValue(savedCode);
             }
+            editor.on('change', function (cm) {
+                // Save code in localStorage whenever it changes
+                localStorage.setItem('code', cm.getValue());
+            });
 
             //descarga del archivo
             function download(filename, text) {
